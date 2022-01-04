@@ -33,20 +33,29 @@ class RoundedTextField extends StatelessWidget {
 
   bool obscureText;
 
+  int? maxLines;
+
+  int? maxLength;
+
   RoundedTextField(
       {this.hintText = "",
       required this.textBoxWidth,
       this.circularRadius = 5.0,
       required this.controller,
       required this.icon,
-      this.obscureText = false});
+      this.obscureText = false,
+      this.maxLines,
+      this.maxLength});
 
   Widget build(BuildContext context) {
     return SizedBox(
         width: textBoxWidth,
         child: TextField(
           obscureText: obscureText,
+          maxLines: maxLines,
+          maxLength: maxLength,
           controller: controller,
+          style: TextStyle(color: Colors.white),
           decoration: InputDecoration(
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(circularRadius),
@@ -172,6 +181,7 @@ class TextCard extends StatelessWidget {
   }
 }
 
+//Image Card
 class ImageCard extends StatelessWidget {
   String posterName;
   String postText;
@@ -313,6 +323,46 @@ class MessageCard extends StatelessWidget {
           ],
         )
       ]),
+    );
+  }
+}
+
+class CategorySelectionBox extends StatelessWidget {
+  String text;
+  IconData icon;
+  void Function(bool?)? onChanged;
+  bool? value;
+
+  CategorySelectionBox(
+      {required this.text,
+      required this.icon,
+      required this.onChanged,
+      required this.value});
+
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Text(
+          text,
+          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+        ),
+        const SizedBox(height: 5),
+        Icon(
+          icon,
+          color: Colors.blueGrey,
+        ),
+        Transform.scale(
+          scale: 2.0,
+          child: Checkbox(
+            activeColor: Colors.blueGrey,
+            shape: CircleBorder(),
+            tristate: false,
+            splashRadius: 30,
+            onChanged: onChanged,
+            value: value,
+          ),
+        )
+      ],
     );
   }
 }

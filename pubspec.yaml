@@ -23,6 +23,10 @@ dev_dependencies:
   firebase_storage: ^10.0.6
   firebase_database: ^8.0.1
   shared_preferences: ^2.0.8
+  image_picker: ^0.8.4+4
+  flutter_map: any
+  latlng: any
+  geolocator: 7.6.0
 
   flutter_lints: ^1.0.0
 
