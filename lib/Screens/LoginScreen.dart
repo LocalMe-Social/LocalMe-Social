@@ -1,13 +1,10 @@
-// ignore_for_file: file_names
-
 import 'package:flutter/material.dart';
 import 'package:localmeapp/widgets.dart';
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:localmeapp/globals.dart' as globals;
-
 import 'package:shared_preferences/shared_preferences.dart';
 
+// Base class that creates screen state
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
 
@@ -15,11 +12,13 @@ class LoginScreen extends StatefulWidget {
   LoginScreenState createState() => LoginScreenState();
 }
 
+// Basically the screen state
 class LoginScreenState extends State<LoginScreen> {
   //Text Field Controllers
   TextEditingController _emailController = TextEditingController();
   TextEditingController _passwordController = TextEditingController();
 
+// Variables for emaill and password (input from field)
   var _email;
   var _password;
 
@@ -27,19 +26,22 @@ class LoginScreenState extends State<LoginScreen> {
 
   BuildContext? get loginButtonContext => null;
 
+// All of the UI elements go in the Widget build() function
   @override
   Widget build(BuildContext context) {
+    // Liam likes to start with scaffolds in a new screen
     return Scaffold(
         key: _scaffoldKey,
         body: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            // Column and rows [REDACTED] for pixel-perfect positioning
             Column(
               children: [
-                const SizedBox(
+                const SizedBox( // SizedBox is an invisible box for spacing stuff out
                   height: 5.0,
                 ),
-                LogoWidget(logoWidth: 250.0, logoHeight: 250.0),
+                LogoWidget(logoWidth: 250.0, logoHeight: 250.0), // Custom widget by Liam for the logo
                 RoundedTextField(
                   hintText: "Email",
                   textBoxWidth: 350.0,
