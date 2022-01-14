@@ -5,6 +5,7 @@ import 'package:localmeapp/Screens/FeedScreen.dart';
 import 'package:localmeapp/Screens/MessagesScreen.dart';
 import 'package:localmeapp/Screens/ProfileScreen.dart';
 
+// Base class that creates the screen state
 class HomeScreen extends StatefulWidget {
   @override
   _HomeScreenState createState() => _HomeScreenState();
