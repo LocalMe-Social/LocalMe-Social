@@ -283,6 +283,7 @@ class PostOptionsMapScreenState extends State<PostOptionsMapScreen> {
         maxZoom: 18,
         minZoom: 11,
         zoom: 13.0,
+        onTap: (tapPosition, point) {},
       ),
       layers: [
         TileLayerOptions(
