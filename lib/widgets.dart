@@ -29,7 +29,9 @@ class RoundedTextField extends StatelessWidget {
 
   TextEditingController controller;
 
-  IconData icon;
+  IconData? icon;
+
+  String? prefixText;
 
   bool obscureText;
 
@@ -40,14 +42,23 @@ class RoundedTextField extends StatelessWidget {
   RoundedTextField(
       {this.hintText = "",
       required this.textBoxWidth,
-      this.circularRadius = 5.0,
+      this.circularRadius = 20.0,
       required this.controller,
-      required this.icon,
+      this.icon,
+      this.prefixText,
       this.obscureText = false,
       this.maxLines,
       this.maxLength});
 
   Widget build(BuildContext context) {
+    iconCheck(icon) {
+      if (icon == null) {
+        return null;
+      } else {
+        return Icon(icon);
+      }
+    }
+
     return SizedBox(
         width: textBoxWidth,
         child: TextField(
@@ -63,7 +74,9 @@ class RoundedTextField extends StatelessWidget {
               filled: true,
               hintStyle: TextStyle(color: Colors.grey[800]),
               hintText: this.hintText,
-              prefixIcon: Icon(this.icon),
+              prefixIcon: iconCheck(this.icon),
+              prefixText: this.prefixText,
+              prefixStyle: TextStyle(color: Colors.grey),
               fillColor: Colors.grey[900]),
         ));
   }
@@ -333,11 +346,12 @@ class CategorySelectionBox extends StatelessWidget {
   void Function(bool?)? onChanged;
   bool? value;
 
-  CategorySelectionBox(
-      {required this.text,
-      required this.icon,
-      required this.onChanged,
-      required this.value});
+  CategorySelectionBox({
+        required this.text,
+        required this.icon,
+        required this.onChanged,
+        required this.value
+      });
 
   Widget build(BuildContext context) {
     return Column(

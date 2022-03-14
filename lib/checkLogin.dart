@@ -1,63 +1,44 @@
-// ignore_for_file: file_names
-
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'firebaseimports.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:localmeapp/globals.dart' as globals;
-
 import 'Screens/HomeScreen.dart';
 import 'Screens/LoginScreen.dart';
+import 'globals.dart' as globals;
 
 class CheckLogin extends StatefulWidget {
-  @override
-  _CheckLoginState createState() => _CheckLoginState();
+	@override
+	CheckLoginState createState() => CheckLoginState();
 }
 
-class _CheckLoginState extends State<CheckLogin> {
-  void _checkLoginState() async {
-    globals.prefs = await SharedPreferences.getInstance();
-    Object? email = globals.prefs!.get("Email");
-    Object? password = globals.prefs!.get("Password");
-    if (email == null || email == "") {
-      if (password == null || password == "") {
-        Navigator.pushReplacement(
-            context,
-            new MaterialPageRoute(
-                builder: (BuildContext context) => new LoginScreen()));
-      }
-    } else {
-      try {
-        final firebaseUser = await FirebaseAuth.instance
-            .signInWithEmailAndPassword(
-                email: email.toString(), password: password.toString());
-        globals.loggedInUser = firebaseUser.user;
-        if (globals.loggedInUser!.emailVerified == true) {
-          Navigator.pushReplacement(
-              context,
-              new MaterialPageRoute(
-                  builder: (BuildContext context) => new HomeScreen()));
-        } else {
-          Navigator.pushReplacement(
-              context,
-              new MaterialPageRoute(
-                  builder: (BuildContext context) => new LoginScreen()));
-        }
-      } catch (e) {
-        print(e);
-      }
-    }
-  }
+class CheckLoginState extends State<CheckLogin> {
+	Stream documentStream = FirebaseFirestore.instance.collection('users').doc('ABC123').snapshots();
 
-  @override
-  void initState() {
-    super.initState();
-    _checkLoginState();
-  }
+	void checkLoginState() async {
+	final prefs = await SharedPreferences.getInstance();
+	Stream documentStream = FirebaseFirestore.instance.collection('users').doc(prefs.getString('uid')).snapshots();
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-        backgroundColor: Colors.white,
-        body: Center(child: CircularProgressIndicator()));
-  }
+	if (prefs.containsKey('uid')) {
+		globals.userID = prefs.getString('uid');
+		Navigator.pushReplacement(context,
+			MaterialPageRoute(builder: (BuildContext context) => HomeScreen()));
+	} else {
+		Navigator.pushReplacement(context,
+			MaterialPageRoute(builder: (BuildContext context) => LoginScreen()));
+	}
+}
+
+	@override
+	void initState() {
+	  super.initState();
+	  checkLoginState();
+	}
+
+	@override
+	Widget build(BuildContext context) {
+	return Scaffold(
+		  body: Center(
+		    child: CircularProgressIndicator(),
+		  ),
+	  );
+	}
 }
