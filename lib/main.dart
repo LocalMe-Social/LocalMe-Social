@@ -8,11 +8,12 @@ import 'Screens/HomeScreen.dart';
 import 'Screens/CreatePostScreen.dart';
 import 'checkLogin.dart';
 import 'firebaseimports.dart';
+import 'firebase_options.dart';
 import 'globals.dart' as globals;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   await globals.getLocation();
   runApp(LocalMe());
 }
@@ -31,12 +32,15 @@ class LocalMe extends StatelessWidget {
           textTheme:
               const TextTheme(bodyText1: TextStyle(), bodyText2: TextStyle())
                   .apply(bodyColor: Colors.white, displayColor: Colors.white)),
-      home: HomeScreen(),
-      /*routes: <String, WidgetBuilder>{
-          '/homescreen': (BuildContext context) => HomeScreen(),
-          '/signupscreen': (BuildContext context) => const SignUpScreen(),
-          '/loginscreen': (BuildContext context) => const LoginScreen(),
-        }*/
+      home: CheckLogin(),
+      routes: <String, WidgetBuilder>{
+        '/HomeScreen': (BuildContext context) => HomeScreen(),
+        '/SignUpScreen': (BuildContext context) => const SignUpScreen(),
+        '/SignUpInfoScreen': (BuildContext context) => const SignUpInfoScreen(),
+        '/SignUpPasswordScreen': (BuildContext context) => const SignUpPasswordScreen(),
+        '/SignUpAvatarScreen': (BuildContext context) => const SignUpAvatarScreen(),
+        '/LoginScreen': (BuildContext context) => const LoginScreen(),
+      }
     );
   }
 }

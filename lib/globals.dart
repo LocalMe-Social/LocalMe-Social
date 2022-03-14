@@ -4,9 +4,11 @@ import 'firebaseimports.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-CollectionReference usersDB = FirebaseFirestore.instance.collection("Users");
+CollectionReference usersDB = FirebaseFirestore.instance.collection("users");
 
 User? loggedInUser;
+
+String? userID;
 
 SharedPreferences? prefs;
 

@@ -23,128 +23,112 @@ class LoginScreenState extends State<LoginScreen> {
   var _email;
   var _password;
 
-  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-
-  BuildContext? get loginButtonContext => null;
+  bool staySignedIn = false;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        key: _scaffoldKey,
-        body: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Column(
-              children: [
-                const SizedBox(
-                  height: 5.0,
+      body: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Column(
+            children: [
+              const SizedBox(height: 100.0),
+              LogoWidget(logoWidth: 120, logoHeight: 120),
+              const SizedBox(height: 30.0),
+              Row(
+                children: const [
+                  Text(
+                    "Welcome to ",
+                    style: TextStyle(
+                      fontSize: 30.0,
+                      fontWeight: FontWeight.bold
+                    ),
+                  ),
+                  Text(
+                    "LocalMe",
+                    style: TextStyle(
+                      fontSize: 30.0,
+                      fontFamily: 'Lobster'
+                    ),
+                  )
+                ],
+              ),
+              const SizedBox(height: 20.0),
+              const Text(
+                "Enter your info to Login",
+                style: TextStyle(
+                  fontSize: 25.0,
+                  fontWeight: FontWeight.bold
                 ),
-                LogoWidget(logoWidth: 250.0, logoHeight: 250.0),
-                RoundedTextField(
-                  hintText: "Email",
-                  textBoxWidth: 350.0,
-                  controller: _emailController,
-                  icon: Icons.email,
+              ),
+              const SizedBox(height: 20.0),
+              RoundedTextField(
+                textBoxWidth: MediaQuery.of(context).size.width-80, 
+                controller: _emailController,
+                maxLines: 1,
+                icon: Icons.email,
+              ),
+              const SizedBox(height: 20.0),
+              RoundedTextField(
+                textBoxWidth: MediaQuery.of(context).size.width-80, 
+                controller: _passwordController,
+                obscureText: true,
+                maxLines: 1,
+                icon: Icons.lock,
+              ),
+              Row(
+					      mainAxisAlignment: MainAxisAlignment.center,
+					      children: [
+					      	Checkbox(
+					      		value: staySignedIn,
+					      		onChanged: (bool? value) {
+					      			setState(() {
+					      				staySignedIn = value!;
+					      			});
+					      		},
+					      	),
+					      	const Text("Stay Signed In?")
+					      ],
+				      ),
+              const SizedBox(height: 30.0),
+              InkWell(
+                child: CircleAvatar(
+                  minRadius: 30.0,
+                  child: Icon(Icons.arrow_forward),
                 ),
-                const SizedBox(
-                  height: 10.0,
-                ),
-                RoundedTextField(
-                  hintText: "Password",
-                  textBoxWidth: 350.0,
-                  controller: _passwordController,
-                  icon: Icons.lock,
-                  obscureText: true,
-                ),
-                const SizedBox(
-                  height: 10.0,
-                ),
-                RoundedButton(
-                  text: 'Login',
-                  height: 55,
-                  width: 350.0,
-                  onPressed: () async {
-                    _email = _emailController.text;
-                    _password = _passwordController.text;
-
-                    try {
-                      UserCredential firebaseUser = await FirebaseAuth.instance
-                          .signInWithEmailAndPassword(
-                              email: _email, password: _password);
-                      print("Test");
-                      if (firebaseUser.user!.emailVerified == true) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            duration: Duration(seconds: 2),
-                            content: Row(
-                              children: <Widget>[
-                                CircularProgressIndicator(),
-                                Text("   Logging In....")
-                              ],
-                            ),
-                          ),
-                        );
-                        globals.loggedInUser = firebaseUser.user;
-
-                        await Future.delayed(const Duration(seconds: 2));
-                        Navigator.of(context).pushNamedAndRemoveUntil(
-                            '/homescreen', (Route<dynamic> route) => false);
-                      } else {
-                        showDialog(
-                          context: context,
-                          builder: (_) => SimpleDialog(
-                            title: Text("Your email address is not verified"),
-                            children: <Widget>[
-                              Row(
-                                children: <Widget>[
-                                  Padding(
-                                    padding: const EdgeInsets.only(
-                                        left: 24.0, top: 16.0, bottom: 16.0),
-                                    child: Text(
-                                        "Would you like another verification email to be sent?"),
-                                  )
-                                ],
-                              ),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.end,
-                                children: <Widget>[
-                                  FlatButton(
-                                    onPressed: () {
-                                      Navigator.pop(context);
-                                    },
-                                    child: Text("No"),
-                                  ),
-                                  FlatButton(
-                                    onPressed: () {
-                                      firebaseUser.user!
-                                          .sendEmailVerification();
-                                      Navigator.pop(context);
-                                    },
-                                    child: Text("Yes"),
-                                  )
-                                ],
-                              ),
-                            ],
-                          ),
-                        );
-                      }
-                    } on FirebaseAuthException catch (e) {
-                      print("Test1");
-                      final snackBar = SnackBar(
-                        content: Text("Email or Password incorrect"),
-                        action: SnackBarAction(
-                          label: 'Dismiss',
-                          onPressed: () {},
-                        ),
-                        duration: Duration(seconds: 3),
-                      );
-                      Scaffold.of(loginButtonContext!).showSnackBar(snackBar);
-                    }
-                  },
-                ),
-              ],
-            ),
-          ],
-        ));
+                onTap: () async {
+							    try {
+							    	UserCredential userCredential = await FirebaseAuth.instance
+							    			.signInWithEmailAndPassword(
+							    					email: _emailController.text,
+							    					password: _passwordController.text);
+							    	if(staySignedIn == true) {
+							    		SharedPreferences prefs = await SharedPreferences.getInstance();
+							    		prefs.setString('uid', userCredential.user!.uid);
+							    	}
+							    	globals.userID = userCredential.user!.uid;
+							    	Navigator.of(context)
+							    			.pushNamedAndRemoveUntil('/MainScreen', (route) => false);
+							    } on FirebaseAuthException catch (e) {
+							    	if (e.code == 'weak-password') {
+							    		print('The password provided is too weak.');
+							    	} else if (e.code == 'email-already-in-use') {
+							    		print('The account already exists for that email.');
+							    	}
+							    } catch (e) {
+							    	print(e);
+							    }
+						    }
+              ),
+              const SizedBox(height: 30),
+              RoundedButton(text: "Sign Up", onPressed: () {
+					      Navigator.of(context).pushNamedAndRemoveUntil('/SignUpScreen', (route) => false);
+				      })
+            ],
+          )
+        ],
+      ),
+    );
   }
 }
