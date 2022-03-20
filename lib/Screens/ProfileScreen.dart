@@ -24,36 +24,36 @@ class ProfileScreenState extends State<ProfileScreen> {
         children: [
           Column(
             children: [
-              SizedBox(
+              const SizedBox(
                 height: 50.0,
               ),
               Container(
                   width: 150,
                   height: 150,
-                  decoration: BoxDecoration(
+                  decoration: const BoxDecoration(
                     color: Colors.grey,
                     borderRadius: BorderRadius.all(Radius.circular(80))
                   ),
                   child: ClipRRect(
-                      borderRadius: BorderRadius.all(Radius.circular(80)),
+                      borderRadius: const BorderRadius.all(Radius.circular(80)),
                       child: FittedBox(
                         fit: BoxFit.cover,
                         child: GetImageFrom(FirebaseFirestore.instance.collection('users'), globals.userID!, 'ProfilePictureURL'),
                       )
                     ),
                 ),
-              SizedBox(
+              const SizedBox(
                 height: 20.0,
               ),
               GetTextFrom(FirebaseFirestore.instance.collection('users'), globals.userID!, 'FullName', TextStyle(color: Colors.white, fontSize: 25.0,fontWeight: FontWeight.bold)),
-              SizedBox(height: 10.0),
+              const SizedBox(height: 10.0),
               Row(children: [
                 StackedProfileStats(title: "Posts", stat: 10),
-                VerticalDivider(
+                const VerticalDivider(
                   color: Colors.white,
                 ),
                 StackedProfileStats(title: "Friends", stat: 10),
-                VerticalDivider(
+                const VerticalDivider(
                   color: Colors.white,
                 ),
                 StackedProfileStats(title: "Likes", stat: 10),
