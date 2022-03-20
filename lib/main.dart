@@ -12,35 +12,46 @@ import 'firebase_options.dart';
 import 'globals.dart' as globals;
 
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  await globals.getLocation();
-  runApp(LocalMe());
+	WidgetsFlutterBinding.ensureInitialized();
+	await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+	await globals.getLocation();
+	runApp(LocalMe());
 }
 
 class LocalMe extends StatelessWidget {
-  const LocalMe({Key? key}) : super(key: key);
+	const LocalMe({Key? key}) : super(key: key);
 
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'LocalMe',
-      theme: ThemeData(
-          primarySwatch: Colors.grey,
-          backgroundColor: Colors.blueGrey[900],
-          scaffoldBackgroundColor: Colors.blueGrey[900],
-          textTheme:
-              const TextTheme(bodyText1: TextStyle(), bodyText2: TextStyle())
-                  .apply(bodyColor: Colors.white, displayColor: Colors.white)),
-      home: CheckLogin(),
-      routes: <String, WidgetBuilder>{
-        '/HomeScreen': (BuildContext context) => HomeScreen(),
-        '/SignUpScreen': (BuildContext context) => const SignUpScreen(),
-        '/SignUpInfoScreen': (BuildContext context) => const SignUpInfoScreen(),
-        '/SignUpPasswordScreen': (BuildContext context) => const SignUpPasswordScreen(),
-        '/SignUpAvatarScreen': (BuildContext context) => const SignUpAvatarScreen(),
-        '/LoginScreen': (BuildContext context) => const LoginScreen(),
-      }
-    );
-  }
+	@override
+	Widget build(BuildContext context) {
+		return GestureDetector(
+			onTap: () {
+				FocusScopeNode currentFocus = FocusScope.of(context);
+
+				if(!currentFocus.hasPrimaryFocus) {
+					currentFocus.unfocus();
+				}
+			},
+			child: MaterialApp(
+				title: 'LocalMe',
+				theme: ThemeData(
+						primarySwatch: Colors.grey,
+						backgroundColor: Colors.blueGrey[900],
+						scaffoldBackgroundColor: Colors.blueGrey[900],
+						textTheme:
+								const TextTheme(bodyText1: TextStyle(), bodyText2: TextStyle())
+										.apply(bodyColor: Colors.white, displayColor: Colors.white)),
+				home: CheckLogin(),
+				routes: <String, WidgetBuilder>{
+					'/HomeScreen': (BuildContext context) => HomeScreen(),
+					'/SignUpScreen': (BuildContext context) => const SignUpScreen(),
+					'/SignUpInfoScreen': (BuildContext context) => const SignUpInfoScreen(),
+					'/SignUpPasswordScreen': (BuildContext context) => const SignUpPasswordScreen(),
+					'/SignUpAvatarScreen': (BuildContext context) => const SignUpAvatarScreen(),
+					'/LoginScreen': (BuildContext context) => const LoginScreen(),
+					'/CreatePostScreen': (BuildContext context) => CreatePostScreen(),
+					'/PostOptionsScreen': (BuildContext context) => PostOptionsScreen(),
+				}
+			)
+		);
+	}
 }

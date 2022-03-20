@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 import 'package:flutter/material.dart';
+import 'package:localmeapp/firebaseimports.dart';
+import 'package:localmeapp/get.dart';
 
 //Logo Widget
 class LogoWidget extends StatelessWidget {
@@ -112,14 +114,14 @@ class RoundedButton extends StatelessWidget {
 //Cards for Feed
 
 class TextCard extends StatelessWidget {
-  String posterName;
+  String posterUID;
   String postText;
   String postType;
 
   late IconData typeIcon;
 
   TextCard(
-      {required this.posterName,
+      {required this.posterUID,
       required this.postText,
       required this.postType});
 
@@ -155,16 +157,28 @@ class TextCard extends StatelessWidget {
               ),
               Row(
                 children: [
-                  const CircleAvatar(),
+                  Container(
+                  width: 50,
+                  height: 50,
+                  decoration: const BoxDecoration(
+                    color: Colors.grey,
+                    borderRadius: BorderRadius.all(Radius.circular(90))
+                  ),
+                  child: ClipRRect(
+                      borderRadius: const BorderRadius.all(Radius.circular(90)),
+                      child: FittedBox(
+                        fit: BoxFit.cover,
+                        child: GetImageFrom(FirebaseFirestore.instance.collection('users'), posterUID, 'ProfilePictureURL'),
+                      )
+                    ),
+                  ),
                   const SizedBox(
                     width: 10.0,
                   ),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(posterName,
-                          style: const TextStyle(
-                              fontSize: 15, fontWeight: FontWeight.bold)),
+                      GetTextFrom(FirebaseFirestore.instance.collection('users'), posterUID, "FullName", const TextStyle (fontSize: 15, fontWeight: FontWeight.bold)),
                       Row(
                         children: [
                           Icon(
@@ -196,16 +210,18 @@ class TextCard extends StatelessWidget {
 
 //Image Card
 class ImageCard extends StatelessWidget {
-  String posterName;
+  String posterUID;
   String postText;
   String postType;
+  String postImageURL;
 
   late IconData typeIcon;
 
   ImageCard(
-      {required this.posterName,
+      {required this.posterUID,
       required this.postText,
-      required this.postType});
+      required this.postType,
+      required this.postImageURL});
 
   chooseType() {
     switch (postType) {
@@ -228,27 +244,38 @@ class ImageCard extends StatelessWidget {
   Widget build(BuildContext context) {
     chooseType();
     return Card(
-        color: Colors.blueGrey[900],
-        child: Container(
-          padding: const EdgeInsets.all(16),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Divider(
-                color: Colors.grey[900],
-              ),
-              Row(
+      elevation: 20,
+      color: Colors.blueGrey[900],
+      child: Container(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              padding: const EdgeInsets.fromLTRB(8, 8, 0, 8),
+              child: Row(
                 children: [
-                  const CircleAvatar(),
+                  Container(
+                  width: 50,
+                  height: 50,
+                  decoration: const BoxDecoration(
+                    color: Colors.grey,
+                    borderRadius: BorderRadius.all(Radius.circular(80))
+                  ),
+                  child: ClipRRect(
+                      borderRadius: const BorderRadius.all(Radius.circular(90)),
+                      child: FittedBox(
+                        fit: BoxFit.cover,
+                        child: GetImageFrom(FirebaseFirestore.instance.collection('users'), posterUID, 'ProfilePictureURL'),
+                      )
+                    ),
+                  ),
                   const SizedBox(
                     width: 10.0,
                   ),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(posterName,
-                          style: const TextStyle(
-                              fontSize: 15, fontWeight: FontWeight.bold)),
+                      GetTextFrom(FirebaseFirestore.instance.collection('users'), posterUID, "FullName", const TextStyle (fontSize: 15, fontWeight: FontWeight.bold)),
                       Row(
                         children: [
                           Icon(
@@ -268,20 +295,21 @@ class ImageCard extends StatelessWidget {
                   )
                 ],
               ),
-              Divider(
-                color: Colors.grey[900],
-              ),
-              Container(
-                child: Image.network(
-                    "https://cdn.download.ams.birds.cornell.edu/api/v1/asset/320036721/1800"),
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-              Text(postText)
-            ],
-          ),
-        ));
+            ),
+            Container(
+              width: MediaQuery.of(context).size.width,
+              child: FittedBox(
+                fit: BoxFit.cover,
+                child: Image.network(postImageURL),
+              )
+            ),
+            Container(
+              padding: const EdgeInsets.all(16),
+              child: Text(postText)
+            ),
+          ],
+        ),
+      ));
   }
 }
 
