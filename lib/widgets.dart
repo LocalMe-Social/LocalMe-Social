@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-
-import 'package:flutter/material.dart';
 import 'package:localmeapp/firebaseimports.dart';
 import 'package:localmeapp/get.dart';
 
