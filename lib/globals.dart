@@ -21,6 +21,6 @@ Position? position;
 double? postRadius = 50.0;
 
 getLocation() async {
-  position = await Geolocator.getCurrentPosition(
-      desiredAccuracy: LocationAccuracy.high);
+	position = await Geolocator.getCurrentPosition(
+			desiredAccuracy: LocationAccuracy.high);
 }

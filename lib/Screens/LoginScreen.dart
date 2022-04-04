@@ -109,7 +109,7 @@ class LoginScreenState extends State<LoginScreen> {
 							    	}
 							    	globals.userID = userCredential.user!.uid;
 							    	Navigator.of(context)
-							    			.pushNamedAndRemoveUntil('/MainScreen', (route) => false);
+							    			.pushNamedAndRemoveUntil('/HomeScreen', (route) => false);
 							    } on FirebaseAuthException catch (e) {
 							    	if (e.code == 'weak-password') {
 							    		print('The password provided is too weak.');

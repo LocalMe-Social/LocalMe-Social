@@ -29,8 +29,8 @@ class CheckLoginState extends State<CheckLogin> {
 
 	@override
 	void initState() {
-	  super.initState();
-	  checkLoginState();
+	  	super.initState();
+	  	checkLoginState();
 	}
 
 	@override
@@ -38,7 +38,7 @@ class CheckLoginState extends State<CheckLogin> {
 	return Scaffold(
 		  body: Center(
 		    child: CircularProgressIndicator(),
-		  ),
-	  );
+		  	),
+	  	);
 	}
 }

@@ -248,11 +248,13 @@ class ImageCard extends StatelessWidget {
       color: Colors.blueGrey[900],
       child: Container(
         child: Column(
+          mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Container(
               padding: const EdgeInsets.fromLTRB(8, 8, 0, 8),
               child: Row(
+                mainAxisSize: MainAxisSize.min,
                 children: [
                   Container(
                   width: 50,
@@ -273,10 +275,12 @@ class ImageCard extends StatelessWidget {
                     width: 10.0,
                   ),
                   Column(
+                    mainAxisSize: MainAxisSize.min,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       GetTextFrom(FirebaseFirestore.instance.collection('users'), posterUID, "FullName", const TextStyle (fontSize: 15, fontWeight: FontWeight.bold)),
                       Row(
+                        mainAxisSize: MainAxisSize.min,
                         children: [
                           Icon(
                             typeIcon,
@@ -300,7 +304,7 @@ class ImageCard extends StatelessWidget {
               width: MediaQuery.of(context).size.width,
               child: FittedBox(
                 fit: BoxFit.cover,
-                child: Image.network(postImageURL),
+                child: postImageURL == '' ? const CircularProgressIndicator() : Image.network(postImageURL),
               )
             ),
             Container(

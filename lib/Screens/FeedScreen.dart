@@ -10,6 +10,14 @@ class FeedScreen extends StatefulWidget {
 	FeedScreenState createState() => FeedScreenState();
 }
 
+Future<QuerySnapshot<Map<String, dynamic>>> getFeed() async {
+  	var firestore = FirebaseFirestore.instance;
+  	var querySnap = await firestore
+	  	.collection('posts')
+	  	.get();
+  return querySnap;
+}
+
 class FeedScreenState extends State<FeedScreen> {
 	@override
 	Widget build(BuildContext context) {
@@ -30,32 +38,42 @@ class FeedScreenState extends State<FeedScreen> {
 				},
 			),
 			body: Container(
-				child: StreamBuilder(
-					stream: FirebaseFirestore.instance.collection("posts").snapshots(),
+				child: FutureBuilder(
+					future: getFeed(),
 					builder: (context, AsyncSnapshot<QuerySnapshot> postSnapshot) {
-						return ListView.builder(
-							itemCount: postSnapshot.data!.docs.length,
-							itemBuilder: (BuildContext context, int index) {
-								if(Geolocator.distanceBetween(globals.position!.latitude, globals.position!.longitude, postSnapshot.data!.docs[index]["latitude"], postSnapshot.data!.docs[index]["longitude"]) <= (globals.postRadius! * 100)) {
-									switch(postSnapshot.data!.docs[index]["Type"]) {
-										case "Image":
-											return ImageCard(
-												posterUID: postSnapshot.data!.docs[index]["PosterUID"], 
-												postText: postSnapshot.data!.docs[index]["PostText"], 
-												postType: postSnapshot.data!.docs[index]["PostType"], 
-												postImageURL: postSnapshot.data!.docs[index]["PostImageURL"]
-										);
-										case "Text":
-											return TextCard(
-												posterUID: postSnapshot.data!.docs[index]["PosterUID"], 
-												postText: postSnapshot.data!.docs[index]["PostText"], 
-												postType: postSnapshot.data!.docs[index]["PostType"]
-										);
+						if (postSnapshot.hasError) {
+							return const Text("An Error Occured");
+						}
+						if (!postSnapshot.hasData) {
+							return const CircularProgressIndicator();
+						} else if (postSnapshot.hasData) {
+							int postCount = postSnapshot.data!.docs.length;
+							return ListView.builder(
+								shrinkWrap: true,
+								itemCount: postCount,
+								itemBuilder: (BuildContext context, int index) {
+									if(Geolocator.distanceBetween(globals.position!.latitude, globals.position!.longitude, postSnapshot.data!.docs[index]["latitude"], postSnapshot.data!.docs[index]["longitude"]) <= (globals.postRadius! * 100)) {
+										switch(postSnapshot.data!.docs[index]["Type"]) {
+											case "Image":
+												return ImageCard(
+													posterUID: postSnapshot.data!.docs[index]["PosterUID"], 
+													postText: postSnapshot.data!.docs[index]["PostText"], 
+													postType: postSnapshot.data!.docs[index]["PostType"], 
+													postImageURL: postSnapshot.data!.docs[index]["PostImageURL"],
+											);
+											case "Text":
+												return TextCard(
+													posterUID: postSnapshot.data!.docs[index]["PosterUID"], 
+													postText: postSnapshot.data!.docs[index]["PostText"], 
+													postType: postSnapshot.data!.docs[index]["PostType"],
+											);
+										}
 									}
+									return Text("Error");
 								}
-								return Text("Error");
-							}
-						);
+							);
+						}
+						return Text("Error");
 					}
 				),
 			)
