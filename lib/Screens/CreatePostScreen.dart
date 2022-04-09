@@ -1,15 +1,13 @@
 // ignore_for_file: file_names
-
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:localmeapp/firebaseimports.dart';
-import 'package:localmeapp/widgets.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter_map/flutter_map.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:localmeapp/globals.dart' as globals;
+import '../Widgets/category_selection_box.widget.dart';
+import '../Widgets/rounded_text_field.widget.dart';
 
 class CreatePostScreen extends StatefulWidget {
 	@override

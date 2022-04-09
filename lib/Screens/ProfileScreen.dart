@@ -1,10 +1,9 @@
 // ignore_for_file: file_names
-
 import 'package:flutter/material.dart';
 import 'package:localmeapp/firebaseimports.dart';
 import 'package:localmeapp/globals.dart' as globals;
-import 'package:localmeapp/widgets.dart';
 import 'package:localmeapp/get.dart';
+import '../Widgets/Profile/stacked_profile_stats.widget.dart';
 
 class ProfileScreen extends StatefulWidget {
 	@override

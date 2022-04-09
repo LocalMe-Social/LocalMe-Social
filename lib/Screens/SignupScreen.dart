@@ -1,12 +1,12 @@
 // ignore_for_file: file_names
-
 import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:localmeapp/widgets.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:localmeapp/globals.dart' as globals;
 import 'package:localmeapp/firebaseimports.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../Widgets/logo.widget.dart';
+import '../Widgets/rounded_text_field.widget.dart';
 
 //Text Field Controllers
 TextEditingController _emailController = TextEditingController();

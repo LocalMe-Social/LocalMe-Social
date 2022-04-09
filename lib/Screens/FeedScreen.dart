@@ -1,9 +1,10 @@
 // ignore_for_file: file_names
 import 'package:flutter/material.dart';
 import 'package:localmeapp/firebaseimports.dart';
-import 'package:localmeapp/widgets.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:localmeapp/globals.dart' as globals;
+import '../Widgets/Feed/image_card.widget.dart';
+import '../Widgets/Feed/text_card.widget.dart';
 
 class FeedScreen extends StatefulWidget {
 	@override
@@ -11,11 +12,11 @@ class FeedScreen extends StatefulWidget {
 }
 
 Future<QuerySnapshot<Map<String, dynamic>>> getFeed() async {
-  	var firestore = FirebaseFirestore.instance;
-  	var querySnap = await firestore
-	  	.collection('posts')
-	  	.get();
-  return querySnap;
+		var firestore = FirebaseFirestore.instance;
+		var querySnap = await firestore
+			.collection('posts')
+			.get();
+	return querySnap;
 }
 
 class FeedScreenState extends State<FeedScreen> {
