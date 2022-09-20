@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import '../Widgets/rounded_button.widget.dart';
 import '../Widgets/rounded_text_field.widget.dart';
 import '../globals.dart' as globals;
@@ -93,26 +92,6 @@ class LoginScreenState extends State<LoginScreen> {
 									child: Icon(Icons.arrow_forward),
 								),
 								onTap: () async {
-									try {
-										UserCredential userCredential = await FirebaseAuth.instance.signInWithEmailAndPassword(
-											email: _emailController.text,
-											password: _passwordController.text
-										);
-										if(staySignedIn == true) {
-											SharedPreferences prefs = await SharedPreferences.getInstance();
-											prefs.setString('uid', userCredential.user!.uid);
-										}
-										globals.userID = userCredential.user!.uid;
-										Navigator.of(context).pushNamedAndRemoveUntil('/HomeScreen', (route) => false);
-									} on FirebaseAuthException catch (e) {
-										if (e.code == 'weak-password') {
-											print('The password provided is too weak.');
-										} else if (e.code == 'email-already-in-use') {
-											print('The account already exists for that email.');
-										}
-									} catch (e) {
-										print(e);
-									}
 								}
 							),
 							const SizedBox(height: 30),

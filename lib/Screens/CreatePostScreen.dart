@@ -1,7 +1,6 @@
 // ignore_for_file: file_names
 import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:localmeapp/firebaseimports.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
@@ -150,7 +149,6 @@ class CreatePostScreenState extends State<CreatePostScreen> {
 }
 
 class PostOptionsScreenState extends State<PostOptionsScreen> {
-	CollectionReference posts = FirebaseFirestore.instance.collection('posts');
 
 	//Variables for Checkbox States
 	bool? peopleCheckBox = true;
@@ -162,36 +160,6 @@ class PostOptionsScreenState extends State<PostOptionsScreen> {
 
 	String? postCategory = 'People';
 	String? postUrl;
-
-	createImagePost(File image, String name) async {
-		FirebaseStorage storage = FirebaseStorage.instance;
-		Reference ref = storage.ref().child(name);
-		UploadTask uploadTask = ref.putFile(image);
-		uploadTask.whenComplete(() async {
-			postUrl = await ref.getDownloadURL();
-			print(postUrl);
-			posts.doc(name).set({
-			'PostText': _descriptionController.text,
-			'PostType': postCategory,
-			'PosterUID': globals.userID,
-			'PostImageURL': postUrl,
-			'Type': postType,
-			'latitude': globals.position!.latitude,
-			'longitude': globals.position!.longitude,
-			});
-		});
-	}
-
-	createTextPost(String name) async {
-		posts.add({
-			'PostText': _descriptionController.text,
-			'PostType': postCategory,
-			'PosterUID': globals.userID,
-			'Type': postType,
-			'latitude': globals.position!.latitude,
-			'longitude': globals.position!.longitude,
-		});
-	}
 
 	@override
 	Widget build(BuildContext context) {
@@ -206,13 +174,6 @@ class PostOptionsScreenState extends State<PostOptionsScreen> {
 			floatingActionButton: FloatingActionButton(
 				child: Icon(Icons.arrow_forward),
 				onPressed: () async {
-					String id = posts.doc().id;
-					if(postType == "Image") {
-						createImagePost(_image!, id);
-					} else {
-						createTextPost(id);
-					}
-					Navigator.of(context).pushNamedAndRemoveUntil('/HomeScreen', (route) => false);
 				},
 			),
 			body: Row(children: [

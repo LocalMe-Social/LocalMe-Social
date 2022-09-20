@@ -1,8 +1,6 @@
 // ignore_for_file: file_names
 import 'package:flutter/material.dart';
-import 'package:localmeapp/firebaseimports.dart';
 import 'package:localmeapp/globals.dart' as globals;
-import 'package:localmeapp/get.dart';
 import '../Widgets/Profile/stacked_profile_stats.widget.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -15,7 +13,7 @@ class ProfileScreenState extends State<ProfileScreen> {
 	Widget build(BuildContext context) {
 		return Scaffold(
 			appBar: AppBar(
-				title: GetTextFrom(FirebaseFirestore.instance.collection('users'), globals.userID!, 'Username',TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+				title: Text("username"),
 				backgroundColor: Colors.blueGrey[900],
 			),
 			body: Row(
@@ -37,14 +35,12 @@ class ProfileScreenState extends State<ProfileScreen> {
 											borderRadius: const BorderRadius.all(Radius.circular(80)),
 											child: FittedBox(
 												fit: BoxFit.cover,
-												child: GetImageFrom(FirebaseFirestore.instance.collection('users'), globals.userID!, 'ProfilePictureURL'),
 											)
 										),
 								),
 							const SizedBox(
 								height: 20.0,
 							),
-							GetTextFrom(FirebaseFirestore.instance.collection('users'), globals.userID!, 'FullName', TextStyle(color: Colors.white, fontSize: 25.0,fontWeight: FontWeight.bold)),
 							const SizedBox(height: 10.0),
 							Row(children: [
 								StackedProfileStats(title: "Posts", stat: 10),

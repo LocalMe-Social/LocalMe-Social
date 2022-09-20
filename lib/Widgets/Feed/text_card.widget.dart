@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:localmeapp/firebaseimports.dart';
-import 'package:localmeapp/get.dart';
 
 class TextCard extends StatelessWidget {
 	String posterUID;
@@ -53,7 +51,6 @@ class TextCard extends StatelessWidget {
 											borderRadius: const BorderRadius.all(Radius.circular(90)),
 											child: FittedBox(
 												fit: BoxFit.cover,
-												child: GetImageFrom(FirebaseFirestore.instance.collection('users'), posterUID, 'ProfilePictureURL'),
 										)
 									),
 								),
@@ -61,7 +58,6 @@ class TextCard extends StatelessWidget {
 								Column(
 									crossAxisAlignment: CrossAxisAlignment.start,
 									children: [
-										GetTextFrom(FirebaseFirestore.instance.collection('users'), posterUID, "FullName", const TextStyle (fontSize: 15, fontWeight: FontWeight.bold)),
 										Row(
 											children: [
 												Icon(

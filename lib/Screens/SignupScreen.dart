@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:localmeapp/globals.dart' as globals;
-import 'package:localmeapp/firebaseimports.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../Widgets/logo.widget.dart';
 import '../Widgets/rounded_text_field.widget.dart';
@@ -249,36 +248,11 @@ class SignUpPasswordScreenState extends State<SignUpPasswordScreen> {
 }
 
 class SignUpAvatarScreenState extends State<SignUpAvatarScreen> {
-	FirebaseAuth auth = FirebaseAuth.instance;
-	CollectionReference users = FirebaseFirestore.instance.collection('users');
 
 	bool? staySignedIn = false;
 
 	final picker = ImagePicker();
 	String? postUrl;
-
-	Future getImage() async {
-		final pickedFile = await picker.getImage(source: ImageSource.gallery);
-
-		setState(() {
-			if (pickedFile != null) {
-				_image = File(pickedFile.path);
-			} else {
-				print('No image selected.');
-			}
-		});
-	}
-
-	uploadImage(File image, String name) async {
-		FirebaseStorage storage = FirebaseStorage.instance;
-		Reference ref = storage.ref().child(name);
-		UploadTask uploadTask = ref.putFile(image);
-		uploadTask.whenComplete(() async {
-			postUrl = await ref.getDownloadURL();
-			print(postUrl);
-			users.doc(globals.userID).set({'ProfilePictureURL': postUrl}, SetOptions(merge: true));
-		});
-	}
 
 	@override
 	Widget build(BuildContext context) {
@@ -317,7 +291,6 @@ class SignUpAvatarScreenState extends State<SignUpAvatarScreen> {
 											)
 										),
 								),
-								onTap: getImage
 							),
 							const SizedBox(height: 30.0),
 							Row(
@@ -340,36 +313,7 @@ class SignUpAvatarScreenState extends State<SignUpAvatarScreen> {
 									minRadius: 30.0,
 									child: Icon(Icons.arrow_forward),
 								),
-								onTap: () async {
-									try {
-										UserCredential userCredential = await FirebaseAuth.instance
-											.createUserWithEmailAndPassword(
-												email: _emailController.text,
-												password: _passwordController.text);
-										globals.userID = userCredential.user!.uid;
-										await uploadImage(_image!, userCredential.user!.uid.toString()+"_profile_image");
-										users.doc(userCredential.user!.uid).set({
-											'UID': userCredential.user!.uid,
-											'Email': userCredential.user!.email,
-											'FullName': _fullname,
-											'Username': _username,
-									});
-									if(staySignedIn == true) {
-										SharedPreferences prefs = await SharedPreferences.getInstance();
-										prefs.setString('uid', userCredential.user!.uid);
-									}
-									Navigator.of(context).pushNamedAndRemoveUntil('/HomeScreen', (route) => false);
-									users.doc(userCredential.user!.uid).set({'ProfilePictureURL': postUrl}, SetOptions(merge: true));
-									} on FirebaseAuthException catch (e) {
-									if (e.code == 'weak-password') {
-										print('The password provided is too weak.');
-									} else if (e.code == 'email-already-in-use') {
-										print('The account already exists for that email.');
-										}
-									} catch (e) {
-									print(e);
-									}
-								}
+								onTap: () async {}
 							)
 						]
 					)

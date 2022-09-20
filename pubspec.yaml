@@ -16,17 +16,11 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  cloud_firestore: ^3.1.10
-  firebase_core: ^1.13.1
-  firebase_auth: ^3.3.9
-  firebase_storage: ^10.2.9
-  firebase_database: ^9.0.8
   shared_preferences: ^2.0.8
   image_picker: ^0.8.4+4
   flutter_map: any
   latlng: any
   geolocator: 7.6.0
-  flutter_lints: ^1.0.0
   flutter_launcher_icons: ^0.9.2
 
 flutter_icons:
