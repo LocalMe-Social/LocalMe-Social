@@ -28,7 +28,7 @@ class RoundedTextField extends StatelessWidget {
 			if (icon == null) {
 				return null;
 			} else {
-				return Icon(icon);
+				return Icon(icon, color: Colors.grey[800]);
 			}
 		}
 
@@ -43,7 +43,7 @@ class RoundedTextField extends StatelessWidget {
 					decoration: InputDecoration(
 						border: OutlineInputBorder(borderRadius: BorderRadius.circular(circularRadius)),
 						filled: true,
-						hintStyle: TextStyle(color: Colors.grey[800]),
+						hintStyle: TextStyle(color: Colors.grey[700]),
 						hintText: this.hintText,
 						prefixIcon: iconCheck(this.icon),
 						prefixText: this.prefixText,

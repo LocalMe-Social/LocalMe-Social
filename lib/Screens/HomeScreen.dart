@@ -1,10 +1,8 @@
-// ignore_for_file: file_names
 import 'package:flutter/material.dart';
-import 'package:localmeapp/Screens/FeedScreen.dart';
-import 'package:localmeapp/Screens/MessagesScreen.dart';
-import 'package:localmeapp/Screens/ProfileScreen.dart';
+import 'package:localme_mobile/screens/FeedScreen.dart';
 
 class HomeScreen extends StatefulWidget {
+	const HomeScreen({super.key});
 	@override
 	_HomeScreenState createState() => _HomeScreenState();
 }
@@ -23,13 +21,13 @@ class _HomeScreenState extends State<HomeScreen>
 	Widget build(BuildContext context) {
 		return Scaffold(
 			bottomNavigationBar: Material(
-				color: Colors.blueGrey[900],
+				color: Colors.black,
 				child: TabBar(
 					controller: tabController,
 					tabs: const <Widget>[
 						Tab(
 							icon: Icon(
-								Icons.local_library,
+								Icons.home,
 								color: Colors.white,
 						)),
 						Tab(
@@ -49,7 +47,7 @@ class _HomeScreenState extends State<HomeScreen>
 			),
 			body: TabBarView(
 				controller: tabController,
-				children: <Widget>[FeedScreen(), MessagesScreen(), ProfileScreen()],
+				children: <Widget>[FeedScreen()],
 			),
 		);
 	}

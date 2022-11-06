@@ -1,23 +1,36 @@
 import 'package:flutter/material.dart';
-import '../Widgets/rounded_button.widget.dart';
-import '../Widgets/rounded_text_field.widget.dart';
-import '../globals.dart' as globals;
-import '../Widgets/logo.widget.dart';
+import 'package:localme_mobile/widgets/rounded_button.widget.dart';
+import 'package:localme_mobile/widgets/rounded_icon_button.widget.dart';
+import 'package:localme_mobile/widgets/rounded_text_field.widget.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:localme_mobile/services/users.service.dart' as Users;
 
 class LoginScreen extends StatefulWidget {
-	const LoginScreen({Key? key}) : super(key: key);
-
 	@override
-	LoginScreenState createState() => LoginScreenState();
+	State<LoginScreen> createState() => _LoginScreenState();
 }
 
-class LoginScreenState extends State<LoginScreen> {
-	TextEditingController _emailController = TextEditingController();
-	TextEditingController _passwordController = TextEditingController();
-	var _email;
-	var _password;
-	bool staySignedIn = false;
+class _LoginScreenState extends State<LoginScreen> {
+	TextEditingController emailContoller = TextEditingController();
+	TextEditingController passwordContoller = TextEditingController();
+	bool saveLogin = false;
+
+	checkLogin() async {
+		final prefs = await SharedPreferences.getInstance();
+		final email = prefs.getString('email');
+		final password = prefs.getString('password');
+		if(email != null && password != null) {
+			print("Hey thereeeee");
+			await Users.login(email, password);
+			Navigator.of(context).pushNamedAndRemoveUntil('/HomeScreen', (route) => false);
+		}
+	}
+
+	@override
+	void initState() {
+		checkLogin();
+		super.initState();
+	}
 
 	@override
 	Widget build(BuildContext context) {
@@ -27,83 +40,71 @@ class LoginScreenState extends State<LoginScreen> {
 				children: [
 					Column(
 						children: [
-							const SizedBox(height: 100.0),
-							LogoWidget(logoWidth: 120, logoHeight: 120),
-							const SizedBox(height: 30.0),
-							Row(
-								children: const [
-									Text(
-										"Welcome to ",
-										style: TextStyle(
-											fontSize: 30.0,
-											fontWeight: FontWeight.bold
-										),
-									),
-									Text(
-										"LocalMe",
-										style: TextStyle(
-											fontSize: 30.0,
-											fontFamily: 'Lobster'
-										),
-									)
-								],
-							),
-							const SizedBox(height: 20.0),
-							const Text(
-								"Enter your info to Login",
-								style: TextStyle(
-									fontSize: 25.0,
-									fontWeight: FontWeight.bold
-								),
-							),
-							const SizedBox(height: 20.0),
+							const SizedBox(height: 150),
+							const Text('LocalMe', style: TextStyle(fontSize: 50, fontWeight: FontWeight.bold, fontFamily: 'Lobster')),
+							const SizedBox(height: 150),
 							RoundedTextField(
-								textBoxWidth: MediaQuery.of(context).size.width-80, 
-								controller: _emailController,
 								maxLines: 1,
-								icon: Icons.email,
+								controller: emailContoller, 
+								textBoxWidth: MediaQuery.of(context).size.width-10,
+								hintText: 'E-Mail',
+								icon: Icons.mail,
 							),
-							const SizedBox(height: 20.0),
+							const SizedBox(height: 10),
 							RoundedTextField(
-								textBoxWidth: MediaQuery.of(context).size.width-80, 
-								controller: _passwordController,
+								maxLines: 1,
+								controller: passwordContoller, 
 								obscureText: true,
-								maxLines: 1,
+								textBoxWidth: MediaQuery.of(context).size.width-10,
+								hintText: 'Password',
 								icon: Icons.lock,
 							),
+							const SizedBox(height: 60),
+							RoundedIconButton(
+								icon: Icons.arrow_forward,
+								onPressed: () async {
+									final prefs = await SharedPreferences.getInstance();
+									if(saveLogin) {
+										prefs.setString('email', emailContoller.text);
+										prefs.setString('password', passwordContoller.text);
+									}
+									await Users.login(emailContoller.text, passwordContoller.text);
+									Navigator.of(context).pushNamedAndRemoveUntil('/HomeScreen', (route) => false);
+								}
+							),
+							const SizedBox(height: 20),
 							Row(
-								mainAxisAlignment: MainAxisAlignment.center,
 								children: [
+									const Text("Stay Signed In?"),
 									Checkbox(
-										value: staySignedIn,
+										checkColor: Colors.black,
+										fillColor: MaterialStateProperty.resolveWith<Color>((Set<MaterialState> states) {
+											if (states.contains(MaterialState.disabled)) {
+												return Colors.white.withOpacity(.32);
+												}
+												return Colors.white;
+											}),
+										value: saveLogin,
 										onChanged: (bool? value) {
 											setState(() {
-												staySignedIn = value!;
+											  saveLogin = value!;
 											});
 										},
 									),
-									const Text("Stay Signed In?")
 								],
 							),
-							const SizedBox(height: 30.0),
-							InkWell(
-								child: CircleAvatar(
-									minRadius: 30.0,
-									child: Icon(Icons.arrow_forward),
-								),
-								onTap: () async {
-								}
-							),
-							const SizedBox(height: 30),
+							const SizedBox(height: 25),
 							RoundedButton(
-								text: "Sign Up", 
+								text: 'Create Account',
 								onPressed: () {
-									Navigator.of(context).pushNamedAndRemoveUntil('/SignUpScreen', (route) => false);
-								}
+									Navigator.of(context).pushNamed('/SignUpScreen');
+								},
+								height: 40,
+								width: 130
 							)
 						],
 					)
-				],
+				]
 			),
 		);
 	}

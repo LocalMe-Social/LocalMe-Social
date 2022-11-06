@@ -1,25 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:localmeapp/Screens/FeedScreen.dart';
-import 'package:localmeapp/Screens/HomeScreen.dart';
-import 'package:localmeapp/Screens/ProfileScreen.dart';
-import 'Screens/LoginScreen.dart';
-import 'Screens/SignupScreen.dart';
-import 'Screens/HomeScreen.dart';
-import 'Screens/CreatePostScreen.dart';
-import 'checkLogin.dart';
-import 'firebaseimports.dart';
-import 'firebase_options.dart';
-import 'globals.dart' as globals;
+import 'package:localme_mobile/screens/HomeScreen.dart';
+import 'package:localme_mobile/screens/LoginScreen.dart';
+import 'package:localme_mobile/screens/SignUpScreen.dart';
 
-void main() async {
-	WidgetsFlutterBinding.ensureInitialized();
-	await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-	await globals.getLocation();
-	runApp(LocalMe());
+void main() {
+	runApp(const MyApp());
 }
 
-class LocalMe extends StatelessWidget {
-	const LocalMe({Key? key}) : super(key: key);
+class MyApp extends StatelessWidget {
+	const MyApp({super.key});
 
 	static const MaterialColor primaryBlack = MaterialColor(
 		_blackPrimaryValue,
@@ -40,34 +29,68 @@ class LocalMe extends StatelessWidget {
 
 	@override
 	Widget build(BuildContext context) {
-		return GestureDetector(
-			onTap: () {
-				FocusScopeNode currentFocus = FocusScope.of(context);
-				if(!currentFocus.hasPrimaryFocus) {
-					currentFocus.unfocus();
-				}
+		return MaterialApp(
+			title: 'LocalMe',
+			theme: ThemeData(
+				primarySwatch: primaryBlack,
+				backgroundColor: Colors.white,
+				floatingActionButtonTheme: FloatingActionButtonThemeData(backgroundColor: Colors.white, foregroundColor: Colors.black),
+				scaffoldBackgroundColor: Colors.black,
+				textTheme: Theme.of(context).textTheme.apply(bodyColor: Colors.white, displayColor: Colors.white)
+			),
+			home: LoginScreen(),
+			routes: <String, WidgetBuilder> {
+				'/SignUpScreen': (BuildContext context) => SignUpScreen(),
+				'/SignInScreen': (BuildContext context) => LoginScreen(),
+				'/SignUpAvatarScreen': (BuildContext context) => SignUpAvatarScreen(),
+				'/HomeScreen': (BuildContext context) => HomeScreen(),
 			},
-			child: MaterialApp(
-				title: 'LocalMe',
-				theme: ThemeData(
-						primarySwatch: Colors.grey,
-						backgroundColor: primaryBlack,
-						scaffoldBackgroundColor: primaryBlack,
-						textTheme:
-								const TextTheme(bodyText1: TextStyle(), bodyText2: TextStyle())
-										.apply(bodyColor: Colors.white, displayColor: Colors.white)),
-				home: CheckLogin(),
-				routes: <String, WidgetBuilder>{
-					'/HomeScreen': (BuildContext context) => HomeScreen(),
-					'/SignUpScreen': (BuildContext context) => const SignUpScreen(),
-					'/SignUpInfoScreen': (BuildContext context) => const SignUpInfoScreen(),
-					'/SignUpPasswordScreen': (BuildContext context) => const SignUpPasswordScreen(),
-					'/SignUpAvatarScreen': (BuildContext context) => const SignUpAvatarScreen(),
-					'/LoginScreen': (BuildContext context) => const LoginScreen(),
-					'/CreatePostScreen': (BuildContext context) => CreatePostScreen(),
-					'/PostOptionsScreen': (BuildContext context) => PostOptionsScreen(),
-				}
-			)
+		);
+	}
+}
+
+class MyHomePage extends StatefulWidget {
+	const MyHomePage({super.key, required this.title});
+	final String title;
+
+	@override
+	State<MyHomePage> createState() => _MyHomePageState();
+}
+
+class _MyHomePageState extends State<MyHomePage> {
+	int _counter = 0;
+
+	void _incrementCounter() {
+		setState(() {
+			_counter++;
+		});
+	}
+
+	@override
+	Widget build(BuildContext context) {
+		return Scaffold(
+			appBar: AppBar(
+				title: Text(widget.title),
+			),
+			body: Center(
+				child: Column(
+					mainAxisAlignment: MainAxisAlignment.center,
+					children: <Widget>[
+						const Text(
+							'You have pushed the button this many times:',
+						),
+						Text(
+							'$_counter',
+							style: Theme.of(context).textTheme.headline4,
+						),
+					],
+				),
+			),
+			floatingActionButton: FloatingActionButton(
+				onPressed: _incrementCounter,
+				tooltip: 'Increment',
+				child: const Icon(Icons.add),
+			), 
 		);
 	}
 }

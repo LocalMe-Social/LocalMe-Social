@@ -1,19 +1,28 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:localme_mobile/services/users.service.dart' as Users;
 
-class TextCard extends StatelessWidget {
-	String posterUID;
-	String postText;
-	String postType;
-	late IconData typeIcon;
-
+class TextCard extends StatefulWidget {
 	TextCard({
 		required this.posterUID,
 		required this.postText,
 		required this.postType
 	});
 
+	String posterUID;
+	String postText;
+	String postType;
+
+	State<TextCard> createState() => _TextCardState();
+}
+
+class _TextCardState extends State<TextCard> {
+	String posterName = 'loading';
+	String posterAvatarUrl = '';
+	late IconData typeIcon;
+
 	chooseType() {
-		switch (postType) {
+		switch (widget.postType) {
 			case "People":
 				typeIcon = Icons.people;
 				break;
@@ -28,16 +37,33 @@ class TextCard extends StatelessWidget {
 		}
 	}
 
+	void getPosterInfo(String userID) async {
+		var response = await Users.get(widget.posterUID);
+		String fullname = jsonDecode(response.body)['fullname'];
+		String avatarUrl = jsonDecode(response.body)['avatarUrl'];
+		setState(() {
+		  posterName = fullname;
+		  posterAvatarUrl = avatarUrl;
+		});
+		print(fullname);
+		print(avatarUrl);
+	}
+
+	@override
+  void initState() {
+    getPosterInfo(widget.posterUID);
+    super.initState();
+  }
+
 	Widget build(BuildContext context) {
 		chooseType();
 		return Card(
-			color: Colors.blueGrey[900],
+			color: Colors.grey[900],
 			child: Container(
 				padding: const EdgeInsets.all(16),
 				child: Column(
 					crossAxisAlignment: CrossAxisAlignment.start,
 					children: [
-						Divider(color: Colors.grey[900]),
 						Row(
 							children: [
 								Container(
@@ -51,6 +77,7 @@ class TextCard extends StatelessWidget {
 											borderRadius: const BorderRadius.all(Radius.circular(90)),
 											child: FittedBox(
 												fit: BoxFit.cover,
+												child: Image.network(posterAvatarUrl),
 										)
 									),
 								),
@@ -58,6 +85,7 @@ class TextCard extends StatelessWidget {
 								Column(
 									crossAxisAlignment: CrossAxisAlignment.start,
 									children: [
+										Text(posterName),
 										Row(
 											children: [
 												Icon(
@@ -66,7 +94,7 @@ class TextCard extends StatelessWidget {
 												),
 												const SizedBox(width: 5),
 												Text(
-													postType,
+													widget.postType,
 													style: TextStyle(fontSize: 12),
 												)
 											],
@@ -76,7 +104,7 @@ class TextCard extends StatelessWidget {
 							],
 						),
 						Divider(color: Colors.grey[900]),
-						Text(postText)
+						Text(widget.postText)
 					],
 				),
 			)
