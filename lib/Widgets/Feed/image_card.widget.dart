@@ -48,8 +48,6 @@ class _ImageCardState extends State<ImageCard> {
 		  posterName = fullname;
 		  posterAvatarUrl = avatarUrl;
 		});
-		print(fullname);
-		print(avatarUrl);
 	}
 
 	@override

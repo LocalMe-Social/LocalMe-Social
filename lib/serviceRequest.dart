@@ -1,9 +1,7 @@
 import 'package:http/http.dart' as http;
 
 get(String endpoint, String? token, Map<String, dynamic>? queryParams) async {
-	print("Hey");
 	var url = Uri.http('localhost:3030', endpoint, queryParams);
-	print('URL');
 	http.Response response;
 	if(queryParams == null) {
 		url = Uri.http('localhost:3030', endpoint);

@@ -15,7 +15,6 @@ class FeedScreenState extends State<FeedScreen> {
 	var postItems;
 	Future getFeed() async {
 		var response = await Posts.get();
-		print(response.statusCode);
 		if(response.statusCode == 200) {
 			setState(() {
 				postItems = jsonDecode(response.body)['data'];
@@ -54,7 +53,6 @@ class FeedScreenState extends State<FeedScreen> {
 						itemCount: postItems.length,
 						itemBuilder: (BuildContext context, index) {
 							final item = postItems[index];
-							print(item);
 							if(item['type'] == 'TEXT') {
 								return TextCard(posterUID: item['creatorId'], postText: item['description'], postType: item['category']);
 							}

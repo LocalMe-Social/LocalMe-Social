@@ -45,8 +45,6 @@ class _TextCardState extends State<TextCard> {
 		  posterName = fullname;
 		  posterAvatarUrl = avatarUrl;
 		});
-		print(fullname);
-		print(avatarUrl);
 	}
 
 	@override

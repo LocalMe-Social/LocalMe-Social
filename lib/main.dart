@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:localme_mobile/screens/HomeScreen.dart';
 import 'package:localme_mobile/screens/LoginScreen.dart';
 import 'package:localme_mobile/screens/SignUpScreen.dart';
+import 'package:localme_mobile/screens/TestScreen.dart';
 
 void main() {
 	runApp(const MyApp());
@@ -44,6 +45,7 @@ class MyApp extends StatelessWidget {
 				'/SignInScreen': (BuildContext context) => LoginScreen(),
 				'/SignUpAvatarScreen': (BuildContext context) => SignUpAvatarScreen(),
 				'/HomeScreen': (BuildContext context) => HomeScreen(),
+				'/TestScreen': (BuildContext context) => TestScreen(),
 			},
 		);
 	}

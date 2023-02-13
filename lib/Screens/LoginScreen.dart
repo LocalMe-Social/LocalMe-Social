@@ -20,7 +20,6 @@ class _LoginScreenState extends State<LoginScreen> {
 		final email = prefs.getString('email');
 		final password = prefs.getString('password');
 		if(email != null && password != null) {
-			print("Hey thereeeee");
 			await Users.login(email, password);
 			Navigator.of(context).pushNamedAndRemoveUntil('/HomeScreen', (route) => false);
 		}
@@ -68,8 +67,12 @@ class _LoginScreenState extends State<LoginScreen> {
 										prefs.setString('email', emailContoller.text);
 										prefs.setString('password', passwordContoller.text);
 									}
-									await Users.login(emailContoller.text, passwordContoller.text);
-									Navigator.of(context).pushNamedAndRemoveUntil('/HomeScreen', (route) => false);
+									var responseCode = await Users.login(emailContoller.text, passwordContoller.text);
+									if(responseCode == 201) {
+										Navigator.of(context).pushNamedAndRemoveUntil('/HomeScreen', (route) => false);
+									} else {
+										print("Incorrect Login");
+									}
 								}
 							),
 							const SizedBox(height: 20),
