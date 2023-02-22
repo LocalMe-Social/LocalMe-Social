@@ -51,10 +51,10 @@ class _ImageCardState extends State<ImageCard> {
 	}
 
 	@override
-  void initState() {
-    getPosterInfo(widget.posterUID);
-    super.initState();
-  }
+  	void initState() {
+  	  	getPosterInfo(widget.posterUID);
+  	  	super.initState();
+  	}
 
 	Widget build(BuildContext context) {
 		chooseType();

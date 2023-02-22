@@ -15,6 +15,7 @@ login(String email, String password) async {
 	var response = await serviceRequest.post('/authentication', body, null);
 	var responseBody = jsonDecode(response.body);
 	globals.token = responseBody['accessToken'];
+	globals.currentUserId = responseBody['user']['id'];
 	return response.statusCode;
 }
 

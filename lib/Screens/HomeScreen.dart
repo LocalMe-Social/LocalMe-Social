@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:localme_mobile/screens/FeedScreen.dart';
+import 'package:localme_mobile/screens/ProfileScreen.dart';
 
 class HomeScreen extends StatefulWidget {
 	const HomeScreen({super.key});
@@ -14,7 +15,7 @@ class _HomeScreenState extends State<HomeScreen>
 	@override
 	void initState() {
 		super.initState();
-		tabController = TabController(length: 3, vsync: this);
+		tabController = TabController(length: 2, vsync: this);
 	}
 
 	@override
@@ -30,11 +31,11 @@ class _HomeScreenState extends State<HomeScreen>
 								Icons.home,
 								color: Colors.white,
 						)),
-						Tab(
-							icon: Icon(
-								Icons.message,
-								color: Colors.white,
-						)),
+						// Tab(
+						// 	icon: Icon(
+						// 		Icons.message,
+						// 		color: Colors.white,
+						// )),
 						//new Tab(icon: Icon(Icons.location_city)),
 						//new Tab(icon: Icon(Icons.people)),
 						Tab(
@@ -47,7 +48,7 @@ class _HomeScreenState extends State<HomeScreen>
 			),
 			body: TabBarView(
 				controller: tabController,
-				children: <Widget>[FeedScreen()],
+				children: <Widget>[FeedScreen(), ProfileScreen()],
 			),
 		);
 	}

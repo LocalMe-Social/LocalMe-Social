@@ -8,10 +8,10 @@ import 'package:localme_mobile/globals.dart' as globals;
 
 class FeedScreen extends StatefulWidget {
 	@override
-	FeedScreenState createState() => FeedScreenState();
+	State<FeedScreen> createState() => _FeedScreenState();
 }
 
-class FeedScreenState extends State<FeedScreen> {
+class _FeedScreenState extends State<FeedScreen> {
 	var postItems;
 	Future getFeed() async {
 		var response = await Posts.get();
